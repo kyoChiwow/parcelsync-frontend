@@ -33,16 +33,16 @@ interface Hero115Props extends HeroBasicProps {}
 type Props = Partial<Hero115Props>;
 
 const defaultProps: Hero115Props = {
-  heading: "Blocks Built With Shadcn & Tailwind",
-  description: "Finely crafted components built with React, Tailwind and shadcn/ui. Developers can copy and paste these blocks directly into their project.",
+  heading: "ParcelSync! Deliver with Confidence",
+  description: "ParcelSync is a modern parcel management platform built to streamline end-to-end courier operations. It connects dispatchers, riders, and customers in real time for effortless tracking and dependable delivery logistics.",
   buttons: {
     primary: {
-      text: "Browse Components",
-      url: "https://shadcnblocks.com",
+      text: "Create Parcel",
+      url: "/dashboard",
     },
     secondary: {
-      text: "View GitHub",
-      url: "https://shadcnblocks.com",
+      text: "Create Parcel",
+      url: "/dashboard",
     },
   },
   image: {
@@ -50,11 +50,10 @@ const defaultProps: Hero115Props = {
     srcDark: "https://deifkwefumgah.cloudfront.net/shadcnblocks/image-set/modern/saas-hero/saas-hero-1-16x9-dark.png",
     alt: "Hero Image Placeholder",
   },
-  byline: "Trusted by 25,000+ businesses worldwide",
   icon: <Wifi className="size-6" />,
 };
 
-const Hero115 = (props: Props) => {
+const HeroSection = (props: Props) => {
   const { icon, heading, description, buttons, image, byline, className } = {
     ...defaultProps,
     ...props,
@@ -122,4 +121,4 @@ const Hero115 = (props: Props) => {
   );
 };
 
-export { Hero115 };
+export { HeroSection };
