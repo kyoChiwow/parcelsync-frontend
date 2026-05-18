@@ -44,6 +44,8 @@ export default function Navbar() {
     }
   };
 
+  console.log(data)
+
   return (
     <header className="border-b">
       <div className="flex h-16 items-center justify-between gap-4 container mx-auto px-4">
@@ -109,7 +111,7 @@ export default function Navbar() {
                 {navigationLinks.map((link) => {
                   if (
                     link.role === "PUBLIC" ||
-                    link.role === data?.data?.data?.role
+                    link.role === data?.data?.role
                   ) {
                     return (
                       <NavigationMenuItem key={`${link.href}-${link.role}`}>
@@ -132,13 +134,13 @@ export default function Navbar() {
         {/* Right side */}
         <div className="flex items-center gap-2">
           <ModeToggle />
-          {!data?.data?.data?.email && (
+          {!data?.data?.email && (
             <Button asChild className="text-sm">
               <Link to="/login">Login</Link>
             </Button>
           )}
-          {data?.data?.data?.email && (
-            <div>
+          {data?.data?.email && (
+            <div className="flex items-center gap-1">
               <Button
                 variant={"outline"}
                 onClick={handleLogout}
