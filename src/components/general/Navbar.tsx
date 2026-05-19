@@ -24,7 +24,6 @@ import Logo from "@/assets/icons/Logo";
 const navigationLinks = [
   { href: "/", label: "Home", role: "PUBLIC" },
   { href: "/about", label: "About", role: "PUBLIC" },
-  { href: "/tours", label: "Tours", role: "PUBLIC" },
   { href: "/admin", label: "Dashboard", role: role.admin },
   { href: "/admin", label: "Dashboard", role: role.superAdmin },
   { href: "/user", label: "Dashboard", role: role.user },
@@ -89,13 +88,25 @@ export default function Navbar() {
             <PopoverContent align="start" className="w-36 p-1 md:hidden">
               <NavigationMenu className="max-w-none *:w-full">
                 <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
-                  {navigationLinks.map((link, _index) => (
-                    <NavigationMenuItem className="w-full" key={link.label}>
-                      <NavigationMenuLink asChild className="py-1.5">
-                        <Link to={link.href}>{link.label}</Link>
-                      </NavigationMenuLink>
-                    </NavigationMenuItem>
-                  ))}
+                  {navigationLinks.map((link, _index) => {
+                    const userRoles = data?.data?.role;
+                    if (
+                      link.role === "PUBLIC" ||
+                      userRoles?.includes(link.role)
+                    ) {
+                      return (
+                        <NavigationMenuItem key={`${link.href}-${link.role}`}>
+                          <NavigationMenuLink
+                            asChild
+                            className="py-1.5 font-medium text-muted-foreground hover:text-primary"
+                          >
+                            <Link to={link.href}>{link.label}</Link>
+                          </NavigationMenuLink>
+                        </NavigationMenuItem>
+                      );
+                    }
+                    return null;
+                  })}
                 </NavigationMenuList>
               </NavigationMenu>
             </PopoverContent>
@@ -109,9 +120,10 @@ export default function Navbar() {
             <NavigationMenu className="max-md:hidden">
               <NavigationMenuList className="gap-2">
                 {navigationLinks.map((link) => {
+                  const userRoles = data?.data?.role;
                   if (
                     link.role === "PUBLIC" ||
-                    link.role === data?.data?.role
+                    userRoles?.includes(link.role)
                   ) {
                     return (
                       <NavigationMenuItem key={`${link.href}-${link.role}`}>

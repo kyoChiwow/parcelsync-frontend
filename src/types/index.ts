@@ -1,3 +1,5 @@
+import type { ComponentType } from "react";
+
 export {
   type ILogin,
   type IRegister,
@@ -14,7 +16,6 @@ export interface IResponse<T> {
   meta?: IMeta;
 }
 // General Response Type
-
 
 // Register Response Type Here
 export interface IRegisterResponse {
@@ -72,3 +73,22 @@ export interface IMeta {
   totalPage: number;
 }
 // Meta Type
+
+// Sidear Item Type
+export interface ISidebarItem {
+  title: string;
+  items: {
+    title: string;
+    url: string;
+    component: ComponentType;
+  }[];
+}
+// Sidear Item Type
+
+export type TRole =
+  | "SUPER_ADMIN"
+  | "ADMIN"
+  | "USER"
+  | "COMPANY"
+  | "DELIVERY_AGENT"
+  | "HUB_ADMIN";
