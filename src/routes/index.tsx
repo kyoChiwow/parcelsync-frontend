@@ -1,5 +1,6 @@
 import App from "@/App";
 import Verify from "@/components/general/Verify";
+import About from "@/pages/About";
 import HomePage from "@/pages/HomePage";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
@@ -13,8 +14,12 @@ export const router = createBrowserRouter([
       {
         Component: HomePage,
         index: true,
-      }
-    ]
+      },
+      {
+        Component: About,
+        path: "about",
+      },
+    ],
   },
   {
     Component: Login,
@@ -27,5 +32,5 @@ export const router = createBrowserRouter([
   {
     Component: Verify,
     path: "/verify",
-  }
+  },
 ]);
