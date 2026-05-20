@@ -1,11 +1,13 @@
 import * as React from "react";
 
+import Logo from "@/assets/icons/Logo";
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -13,7 +15,7 @@ import {
 } from "@/components/ui/sidebar";
 import { useUserInfoQuery } from "@/redux/features/auth/auth.api";
 import { getSidebarItems } from "@/utils/getSidebarItems";
-import { useLocation } from "react-router";
+import { Link, useLocation } from "react-router";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const location = useLocation();
@@ -25,6 +27,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   return (
     <Sidebar {...props}>
+      <SidebarHeader className="flex items-center">
+        <Link to={"/"}>
+          <Logo />
+        </Link>
+        <span className="text-xl font-bold tracking-tight bg-linear-to-r from-neutral-900 to-neutral-700 dark:from-white dark:to-neutral-300 bg-clip-text text-transparent">
+          Parcel<span className="text-orange-500">Sync</span>
+        </span>
+      </SidebarHeader>
       <SidebarContent>
         {data?.navMain.map((item) => (
           <SidebarGroup key={item.title}>

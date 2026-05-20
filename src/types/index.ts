@@ -7,6 +7,10 @@ export {
   type IVerifyOTP,
 } from "./auth.type";
 
+export {
+  type ICompany,
+} from "./company.type";
+
 // General Response Type
 export interface IResponse<T> {
   statusCode: number;
