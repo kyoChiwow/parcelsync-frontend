@@ -19,7 +19,18 @@ export const userApi = baseApi.injectEndpoints({
       }),
       providesTags: ["COMPANY"],
     }),
+    deleteCompany: builder.mutation<IResponse<null>, string>({
+      query: (companyId) => ({
+        url: `/company/${companyId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["COMPANY"],
+    }),
   }),
 });
 
-export const { useCreateCompanyMutation, useGetCompanyQuery } = userApi;
+export const {
+  useCreateCompanyMutation,
+  useGetCompanyQuery,
+  useDeleteCompanyMutation,
+} = userApi;

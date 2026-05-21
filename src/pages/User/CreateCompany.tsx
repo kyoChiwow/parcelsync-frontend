@@ -1,4 +1,7 @@
+import { DeleteConfirmation } from "@/components/DeleteConfirmation";
+import { AddCompanyModal } from "@/components/modules/Company/AddCompany";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -7,11 +10,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useGetCompanyQuery } from "@/redux/features/user/user.api";
+import {
+  useDeleteCompanyMutation,
+  useGetCompanyQuery,
+} from "@/redux/features/user/user.api";
 import type { ICompany } from "@/types";
+import { Trash2 } from "lucide-react";
+import { toast } from "sonner";
 
 export default function CreateCompany() {
   const { data: myCompanies } = useGetCompanyQuery({});
+  const [deleteCompany] = useDeleteCompanyMutation();
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -24,11 +33,27 @@ export default function CreateCompany() {
     }
   };
 
+  const handleDeleteCompany = (id: string) => {
+    try {
+      const toastId = toast.loading("Deleting Company...");
+
+      deleteCompany(id).unwrap();
+
+      toast.success("Company deleted successfully!", {
+        id: toastId,
+      });
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong!");
+    }
+  };
+
   return (
     <div>
       <div className="w-full max-w-7xl mx-auto px-5">
         <div className="flex justify-between my-8">
           <h1 className="text-xl font-semibold">My Companies</h1>
+          <AddCompanyModal />
         </div>
 
         <div className="border border-muted rounded-md bg-card">
@@ -44,17 +69,14 @@ export default function CreateCompany() {
             <TableBody>
               {myCompanies?.data?.map((item: ICompany) => (
                 <TableRow key={item._id}>
-                  {/* Corrected mapping property from item.name to item.companyName */}
                   <TableCell className="font-medium">
                     {item?.companyName}
                   </TableCell>
 
-                  {/* Added Address Column */}
                   <TableCell className="text-muted-foreground">
                     {item?.address}
                   </TableCell>
 
-                  {/* Added Status Column with dynamic styling */}
                   <TableCell>
                     <Badge
                       variant="outline"
@@ -65,13 +87,17 @@ export default function CreateCompany() {
                   </TableCell>
 
                   <TableCell className="text-right">
-                    {/* Actions slot left flexible for your future buttons */}
-                    <span className="text-sm text-muted-foreground">-</span>
+                    <DeleteConfirmation
+                      onConfirm={() => handleDeleteCompany(item._id)}
+                    >
+                      <Button variant="destructive" size={"sm"}>
+                        <Trash2 />
+                      </Button>
+                    </DeleteConfirmation>
                   </TableCell>
                 </TableRow>
               ))}
 
-              {/* Graceful fallback if no companies exist */}
               {!myCompanies?.data?.length && (
                 <TableRow>
                   <TableCell
