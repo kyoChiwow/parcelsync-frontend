@@ -1,5 +1,6 @@
 import { baseApi } from "@/redux/baseApi";
 import type { ICompany, IMeta, IResponse } from "@/types";
+import type { IParcel } from "@/types/parcel.type";
 
 export const userApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -19,6 +20,14 @@ export const userApi = baseApi.injectEndpoints({
       }),
       providesTags: ["COMPANY"],
     }),
+    getParcels: builder.query<{ data: IParcel[]; meta: IMeta }, unknown>({
+      query: (params) => ({
+        url: "/parcel/my-parcels",
+        method: "GET",
+        params,
+      }),
+      providesTags: ["COMPANY"],
+    }),
     deleteCompany: builder.mutation<IResponse<null>, string>({
       query: (companyId) => ({
         url: `/company/${companyId}`,
@@ -33,4 +42,5 @@ export const {
   useCreateCompanyMutation,
   useGetCompanyQuery,
   useDeleteCompanyMutation,
+  useGetParcelsQuery,
 } = userApi;
