@@ -25,14 +25,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useCreateCompanyMutation } from "@/redux/features/user/user.api";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 
 export function AddParcel() {
   const [open, setOpen] = useState(false);
-  const [createCompany, { isLoading }] = useCreateCompanyMutation();
 
   const form = useForm({
     defaultValues: {
@@ -49,17 +46,7 @@ export function AddParcel() {
   });
 
   const onSubmit = async (data: any) => {
-    try {
-      const res = await createCompany(data).unwrap();
-
-      if (res.success) {
-        toast.success("Company created successfully!");
-        setOpen(false);
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error("Something went wrong!");
-    }
+    console.log(data);
   };
 
   const paymentOptions = [
@@ -231,8 +218,8 @@ export function AddParcel() {
           <DialogClose asChild>
             <Button variant="outline">Cancel</Button>
           </DialogClose>
-          <Button form="create-parcel" type="submit" disabled={isLoading}>
-            {isLoading ? "Uploading..." : "Save Changes"}
+          <Button form="create-parcel" type="submit">
+            submit
           </Button>
         </DialogFooter>
       </DialogContent>
