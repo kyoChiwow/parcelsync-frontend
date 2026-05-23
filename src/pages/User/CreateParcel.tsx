@@ -20,7 +20,6 @@ import { role } from "../../constants/role";
 export default function CreateParcel() {
   const { data: userData } = useUserInfoQuery(undefined);
   const { data: myParcels } = useGetParcelsQuery({});
-
   const { data: myCompanies } = useGetCompanyQuery({});
 
   console.log(myCompanies, myParcels);
