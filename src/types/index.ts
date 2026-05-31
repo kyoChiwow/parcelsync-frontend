@@ -8,6 +8,11 @@ export {
 } from "./auth.type";
 
 export {
+  type IParcel,
+  type IParcelHistory,
+} from "./parcel.type";
+
+export {
   type ICompany,
 } from "./company.type";
 

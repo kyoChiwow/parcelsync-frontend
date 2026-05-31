@@ -26,9 +26,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useGetDivisionsQuery } from "@/redux/features/location/location.api";
-import { useGetCompanyQuery } from "@/redux/features/user/user.api";
+import {
+  useCreateParcelMutation,
+  useGetCompanyQuery,
+} from "@/redux/features/user/user.api";
 import { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
+import { toast } from "sonner";
 
 export function AddParcel() {
   const [open, setOpen] = useState(false);
@@ -36,6 +40,8 @@ export function AddParcel() {
     useGetDivisionsQuery(undefined);
   const { data: getCompanies, isLoading: companyLoading } =
     useGetCompanyQuery(undefined);
+  const [createParcel, { isLoading: parcelLoading }] =
+    useCreateParcelMutation();
 
   const companyOptions = getCompanies?.data?.map(
     (item: { _id: string; companyName: string }) => ({
@@ -68,11 +74,22 @@ export function AddParcel() {
   });
 
   const onSubmit = async (data: any) => {
-    console.log(data);
+    try {
+      const res = await createParcel(data).unwrap();
+
+      if (res.success) {
+        toast.success("Parcel created successfully!");
+        setOpen(false);
+      }
+    } catch (error: any) {
+      console.log(error);
+      const serverMessage = error?.data?.message || "Something went wrong!";
+      toast.error(serverMessage);
+    }
   };
 
   const paymentOptions = [
-    { value: "COD", label: "Cash on Delivery" },
+    { value: "COD", label: "Cash On Delivery" },
     { value: "PREPAID", label: "Already Paid" },
   ];
 
@@ -355,8 +372,8 @@ export function AddParcel() {
           <DialogClose asChild>
             <Button variant="outline">Cancel</Button>
           </DialogClose>
-          <Button form="create-parcel" type="submit">
-            Submit
+          <Button form="create-parcel" type="submit" disabled={parcelLoading}>
+            {parcelLoading ? "Uploading..." : "Save Changes"}
           </Button>
         </DialogFooter>
       </DialogContent>

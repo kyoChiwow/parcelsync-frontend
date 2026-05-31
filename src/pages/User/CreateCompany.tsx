@@ -80,7 +80,7 @@ export default function CreateCompany() {
                     <DeleteConfirmation
                       onConfirm={() => handleDeleteCompany(item._id)}
                     >
-                      <Button variant="destructive" size={"sm"}>
+                      <Button variant="ghost" className="text-destructive hover:bg-destructive/10" size="icon">
                         <Trash2 />
                       </Button>
                     </DeleteConfirmation>

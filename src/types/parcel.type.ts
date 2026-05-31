@@ -11,3 +11,17 @@ export interface IParcel {
   deliveryAddress?: string;
   paymentMethod?: string;
 }
+
+interface ITimeline {
+  status: string;
+  remarks: string;
+  timeStamp: string;
+}
+
+export interface IParcelHistory {
+  _id: string;
+  parcelId: string;
+  timeline: ITimeline[];
+  createdAt: string;
+  updatedAt: string;
+}
