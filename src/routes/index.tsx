@@ -10,6 +10,7 @@ import type { TRole } from "@/types";
 import { generateRoutes } from "@/utils/generateRoutes";
 import { withAuth } from "@/utils/withAuth";
 import { createBrowserRouter, Navigate } from "react-router";
+import { adminSidebarItems } from "./adminSidebarItems";
 import { userSidebarItems } from "./useSidebarItems";
 
 export const router = createBrowserRouter([
@@ -36,6 +37,21 @@ export const router = createBrowserRouter([
         element: <Navigate to={"/user"} />,
       },
       ...generateRoutes(userSidebarItems),
+    ],
+  },
+  {
+    Component: withAuth(
+      DashboardLayout,
+      role.admin as TRole,
+      role.superAdmin as TRole,
+    ),
+    path: "/admin",
+    children: [
+      {
+        index: true,
+        element: <Navigate to={"/admin"} />,
+      },
+      ...generateRoutes(adminSidebarItems),
     ],
   },
   {
