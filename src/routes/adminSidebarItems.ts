@@ -1,5 +1,5 @@
-import AllCompanies from "@/components/modules/Company/AllCompanies";
-import AllParcels from "@/components/modules/Parcels/AllParcels";
+import AllCompanies from "@/pages/Admin/AllCompanies";
+import AllParcels from "@/pages/Admin/AllParcels";
 import type { ISidebarItem } from "@/types";
 
 export const adminSidebarItems: ISidebarItem[] = [
