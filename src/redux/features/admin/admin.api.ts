@@ -1,13 +1,12 @@
 import { baseApi } from "@/redux/baseApi";
-import type { ICompany, IMeta } from "@/types";
+import type { ICompany, IMeta, IParcel } from "@/types";
 
 export const userApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllCompanies: builder.query<{ data: ICompany[]; meta: IMeta }, unknown>({
-      query: (params) => ({
+      query: () => ({
         url: "/company/get-all",
         method: "GET",
-        params,
       }),
       providesTags: ["COMPANY"],
     }),
@@ -27,6 +26,13 @@ export const userApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["COMPANY"],
     }),
+    getAllParcels: builder.query<{ data: IParcel[]; meta: IMeta }, unknown>({
+      query: () => ({
+        url: "/parcel/all-parcels",
+        method: "GET",
+      }),
+      providesTags: ["PARCEL"],
+    }),
   }),
 });
 
@@ -34,4 +40,5 @@ export const {
   useGetAllCompaniesQuery,
   useApproveCompanyMutation,
   useRejectCompanyMutation,
+  useGetAllParcelsQuery,
 } = userApi;
