@@ -11,7 +11,27 @@ export const userApi = baseApi.injectEndpoints({
       }),
       providesTags: ["COMPANY"],
     }),
+    approveCompany: builder.mutation({
+      query: ({ id }) => ({
+        url: `/admin/approve`,
+        method: "PATCH",
+        data: { id },
+      }),
+      invalidatesTags: ["COMPANY"],
+    }),
+    rejectCompany: builder.mutation({
+      query: ({ id }) => ({
+        url: `/admin/reject`,
+        method: "PATCH",
+        data: { id },
+      }),
+      invalidatesTags: ["COMPANY"],
+    }),
   }),
 });
 
-export const { useGetAllCompaniesQuery } = userApi;
+export const {
+  useGetAllCompaniesQuery,
+  useApproveCompanyMutation,
+  useRejectCompanyMutation,
+} = userApi;
