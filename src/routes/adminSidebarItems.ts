@@ -1,3 +1,4 @@
+import AllHubs from "@/pages/Admin/AllHubs";
 import AllCompanies from "@/pages/Admin/AllCompanies";
 import AllParcels from "@/pages/Admin/AllParcels";
 import type { ISidebarItem } from "@/types";
@@ -16,6 +17,11 @@ export const adminSidebarItems: ISidebarItem[] = [
         url: "/admin/parcels",
         component: AllParcels,
       },
+      {
+        title: "All Hubs",
+        url: "/admin/hubs",
+        component: AllHubs,
+      }
     ],
   },
 ];

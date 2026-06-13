@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { DeleteConfirmation } from "@/components/DeleteConfirmation";
-import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -13,18 +11,13 @@ import {
   useGetAllCompaniesQuery,
   useGetAllParcelsQuery,
 } from "@/redux/features/admin/admin.api";
-import {
-  useDeleteParcelMutation,
-  useGetSingleParcelHistoryQuery,
-} from "@/redux/features/user/user.api";
-import { Trash2 } from "lucide-react";
+import { useGetSingleParcelHistoryQuery } from "@/redux/features/user/user.api";
+import { Cog } from "lucide-react";
 import { Fragment, useState } from "react";
-import { toast } from "sonner";
 
 export default function AllParcels() {
   const { data: allParcels } = useGetAllParcelsQuery(undefined);
   const { data: allCompanies } = useGetAllCompaniesQuery(undefined);
-  const [deleteParcel] = useDeleteParcelMutation();
 
   const [expandedParcelId, setExpandedParcelId] = useState<string | null>(null);
 
@@ -34,21 +27,6 @@ export default function AllParcels() {
       skip: !expandedParcelId,
     },
   );
-
-  const handleDeleteParcel = (id: string) => {
-    try {
-      const toastId = toast.loading("Deleting Parcel...");
-
-      deleteParcel(id).unwrap();
-
-      toast.success("Parcel deleted successfully!", {
-        id: toastId,
-      });
-    } catch (error: any) {
-      const serverMessage = error?.message || "Something went wrong!";
-      toast.error(serverMessage);
-    }
-  };
 
   const handleExpand = (id: string) => {
     setExpandedParcelId((prev) => (prev === id ? null : id));
@@ -102,21 +80,8 @@ export default function AllParcels() {
                         <TableCell>৳{parcel.netCost}</TableCell>
                         <TableCell>৳{parcel.collectionAmount}</TableCell>
 
-                        <TableCell className="text-right">
-                          <DeleteConfirmation
-                            onConfirm={() => handleDeleteParcel(parcel._id)}
-                          >
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="text-destructive hover:bg-destructive/10"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                              }}
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </DeleteConfirmation>
+                        <TableCell className="flex items-center justify-center">
+                          <Cog />
                         </TableCell>
                       </TableRow>
 
