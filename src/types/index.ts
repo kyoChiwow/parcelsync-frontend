@@ -16,6 +16,10 @@ export {
   type ICompany,
 } from "./company.type";
 
+export { 
+  type IHub,
+} from "./hub.type";
+
 // General Response Type
 export interface IResponse<T> {
   statusCode: number;

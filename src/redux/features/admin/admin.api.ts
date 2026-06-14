@@ -40,6 +40,13 @@ export const userApi = baseApi.injectEndpoints({
       }),
       providesTags: ["HUB"],
     }),
+    getHubAdmins: builder.query({
+      query: () => ({
+        url: "/user/hub-admins",
+        method: "GET",
+      }),
+      providesTags: ["USER"],
+    }),
   }),
 });
 
@@ -49,4 +56,5 @@ export const {
   useRejectCompanyMutation,
   useGetAllParcelsQuery,
   useGetAllHubsQuery,
+  useGetHubAdminsQuery,
 } = userApi;

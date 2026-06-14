@@ -10,7 +10,23 @@ export const userApi = baseApi.injectEndpoints({
       }),
       providesTags: ["LOCATION"],
     }),
+    getAreas: builder.query({
+      query: (params) => ({
+        url: "/location/areas",
+        method: "GET",
+        params,
+      }),
+      providesTags: ["LOCATION"],
+    }),
+    getDistricts: builder.query({
+      query: (params) => ({
+        url: "/location/district",
+        method: "GET",
+        params,
+      }),
+      providesTags: ["LOCATION"],
+    }),
   }),
 });
 
-export const { useGetDivisionsQuery } = userApi;
+export const { useGetDivisionsQuery, useGetAreasQuery, useGetDistrictsQuery } = userApi;

@@ -1,3 +1,4 @@
+import AddHub from "@/components/modules/Hubs/AddHub";
 import {
   Table,
   TableBody,
@@ -7,15 +8,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useGetAllHubsQuery } from "@/redux/features/admin/admin.api";
+import type { IHub } from "@/types";
 
-interface IHub {
-  _id: string;
-  name: string;
-  division: string;
-  district: string;
-  area: string;
-  hubAdmin?: string;
-}
+
 
 export default function AllHubs() {
   const { data: allHubs, isLoading } = useGetAllHubsQuery(undefined);
@@ -26,6 +21,7 @@ export default function AllHubs() {
       <div className="w-full max-w-7xl mx-auto px-5">
         <div className="flex justify-between my-8">
           <h1 className="text-xl font-semibold">All Hubs</h1>
+          <AddHub />
         </div>
 
         <div className="border border-muted rounded-md bg-card">

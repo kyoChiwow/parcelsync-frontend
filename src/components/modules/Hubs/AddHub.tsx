@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -6,11 +7,21 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useGetHubAdminsQuery } from "@/redux/features/admin/admin.api";
+import { useGetAreasQuery, useGetDistrictsQuery, useGetDivisionsQuery } from "@/redux/features/location/location.api";
 
 export default function AddHub() {
+  const { data: allDivision, isLoading: allDivisionsLoading } = useGetDivisionsQuery(undefined);
+  const { data: allArea, isLoading: allAreaLoading } = useGetAreasQuery(undefined);
+  const { data: allDistrict, isLoading: allDistrictLoading } = useGetDistrictsQuery(undefined);
+  const { data: allHubAdmins, isLoading: allHubAdminsLoading } = useGetHubAdminsQuery(undefined);
+
+  console.log(allArea, allDivision, allDistrict, allHubAdmins);
   return (
     <Dialog>
-      <DialogTrigger>Open</DialogTrigger>
+      <DialogTrigger asChild>
+        <Button>Add Hub</Button>
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Are you absolutely sure?</DialogTitle>
