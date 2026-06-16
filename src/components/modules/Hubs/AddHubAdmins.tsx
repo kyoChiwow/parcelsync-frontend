@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -7,7 +8,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useGetAreasQuery, useGetDistrictsQuery, useGetDivisionsQuery } from "@/redux/features/location/location.api";
+import { useGetAllUserQuery } from "@/redux/features/admin/admin.api";
+import {
+  useGetAreasQuery,
+  useGetDistrictsQuery,
+  useGetDivisionsQuery,
+} from "@/redux/features/location/location.api";
 
 export default function AddHubAdmins() {
   const { data: allDivision, isLoading: allDivisionsLoading } =
@@ -16,10 +22,11 @@ export default function AddHubAdmins() {
     useGetAreasQuery(undefined);
   const { data: allDistrict, isLoading: allDistrictLoading } =
     useGetDistrictsQuery(undefined);
+  const { data: allUser, isLoading: allUserLoading } =
+    useGetAllUserQuery(undefined);
 
-  console.log(allArea, allDivision, allDistrict);
+  console.log(allArea, allDivision, allDistrict, allUser);
 
-  
   return (
     <Dialog>
       <DialogTrigger asChild>

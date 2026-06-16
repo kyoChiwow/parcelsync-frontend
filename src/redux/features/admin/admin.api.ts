@@ -10,6 +10,13 @@ export const userApi = baseApi.injectEndpoints({
       }),
       providesTags: ["COMPANY"],
     }),
+    getAllUser: builder.query({
+      query: () => ({
+        url: "/user/get-all",
+        method: "GET",
+      }),
+      providesTags: ["USER"],
+    }),
     approveCompany: builder.mutation({
       query: ({ id }) => ({
         url: `/admin/approve`,
@@ -73,4 +80,7 @@ export const {
   useGetAllParcelsQuery,
   useGetAllHubsQuery,
   useGetHubAdminsQuery,
+  useCreateHubAdminMutation,
+  useDeleteHubAdminMutation,
+  useGetAllUserQuery,
 } = userApi;
