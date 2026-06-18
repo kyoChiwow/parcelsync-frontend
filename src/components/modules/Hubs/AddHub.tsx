@@ -1,4 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import AreasComp from "@/components/general/AreaComp";
+import DistrictsComp from "@/components/general/DistrictComp";
+import DivisionsComp from "@/components/general/DivisionComp";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -103,21 +106,21 @@ export default function AddHub() {
                     Basic Information
                   </TabsTrigger>
                   <TabsTrigger
-                    value="analytics"
+                    value="hubDivision"
                     className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-primary border-b-2 border-transparent rounded-none px-0 pb-3 pt-2 gap-2 text-muted-foreground data-[state=active]:text-foreground font-medium"
                   >
                     <BarChart3 className="h-4 w-4" />
                     Select Division
                   </TabsTrigger>
                   <TabsTrigger
-                    value="reports"
+                    value="hubDistrict"
                     className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-primary border-b-2 border-transparent rounded-none px-0 pb-3 pt-2 gap-2 text-muted-foreground data-[state=active]:text-foreground font-medium"
                   >
                     <FileText className="h-4 w-4" />
                     Select District
                   </TabsTrigger>
                   <TabsTrigger
-                    value="settings"
+                    value="hubArea"
                     className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-primary border-b-2 border-transparent rounded-none px-0 pb-3 pt-2 gap-2 text-muted-foreground data-[state=active]:text-foreground font-medium"
                   >
                     <Settings className="h-4 w-4" />
@@ -181,19 +184,7 @@ export default function AddHub() {
                   value="hubDivision"
                   className="mt-0focus-visible:outline-none"
                 >
-                  <FormField
-                    control={form.control}
-                    name="hubName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Hub Name</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Hub name here" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  <DivisionsComp />
                 </TabsContent>
                 {/* Division Tab */}
 
@@ -202,7 +193,7 @@ export default function AddHub() {
                   value="hubDistrict"
                   className="mt-0 focus-visible:outline-none"
                 >
-                  Hub Districs here
+                  <DistrictsComp />
                 </TabsContent>
                 {/* District Tab */}
 
@@ -211,7 +202,7 @@ export default function AddHub() {
                   value="hubArea"
                   className="mt-0 focus-visible:outline-none"
                 >
-                  Hub Area Here
+                  <AreasComp />
                 </TabsContent>
                 {/* Area Tab */}
               </div>
