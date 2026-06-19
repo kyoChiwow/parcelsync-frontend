@@ -1,4 +1,5 @@
 import AddHub from "@/components/modules/Hubs/AddHub";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -8,13 +9,29 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useGetAllHubsQuery } from "@/redux/features/admin/admin.api";
-import type { IHub } from "@/types";
+import { Trash2 } from "lucide-react";
 
+export interface ILocationRef {
+  _id: string;
+  name: string;
+}
 
+export interface IHubComponent {
+  _id: string;
+  hubName: string;
+  divisionId: ILocationRef;
+  districtId: ILocationRef;
+  areaId: ILocationRef;
+  hubAdminId?: {
+    _id: string;
+    name: string;
+  };
+  __v: number;
+}
 
 export default function AllHubs() {
   const { data: allHubs, isLoading } = useGetAllHubsQuery(undefined);
-  const hubsList = allHubs?.data as IHub[];
+  const hubsList = allHubs?.data;
 
   return (
     <div>
@@ -52,14 +69,18 @@ export default function AllHubs() {
 
               {/* 2. Render List */}
               {!isLoading &&
-                hubsList?.map((hub) => (
+                hubsList?.map((hub: IHubComponent) => (
                   <TableRow key={hub._id}>
-                    <TableCell className="font-medium">{hub.name}</TableCell>
-                    <TableCell>{hub.division}</TableCell>
-                    <TableCell>{hub.district}</TableCell>
-                    <TableCell>{hub.area}</TableCell>
-                    <TableCell>{hub.hubAdmin}</TableCell>
-                    <TableCell className="text-right">Actions</TableCell>
+                    <TableCell className="font-medium">{hub.hubName}</TableCell>
+                    <TableCell>{hub.divisionId?.name}</TableCell>
+                    <TableCell>{hub.districtId?.name}</TableCell>
+                    <TableCell>{hub.areaId?.name}</TableCell>
+                    <TableCell>{hub.hubAdminId?.name}</TableCell>
+                    <TableCell className="text-right">
+                      <Button variant="destructive">
+                        <Trash2 />
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))}
 

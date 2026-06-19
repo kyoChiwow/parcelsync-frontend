@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import AreasComp from "@/components/general/AreaComp";
 import DistrictsComp from "@/components/general/DistrictComp";
 import DivisionsComp from "@/components/general/DivisionComp";
@@ -22,6 +23,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
+import { useCreateHubMutation } from "@/redux/features/admin/admin.api";
 import {
   BarChart3,
   Building2,
@@ -32,6 +34,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
+import { toast } from "sonner";
 
 const STEPS = [
   {
@@ -58,6 +61,7 @@ const STEPS = [
 export default function AddHub() {
   const [open, setOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<string>(STEPS[0].value);
+  const [createHub, { isLoading: hubLoading }] = useCreateHubMutation();
 
   type HubFormData = {
     hubName: string;
@@ -80,7 +84,27 @@ export default function AddHub() {
   });
 
   const onSubmit = async (data: HubFormData) => {
-    console.log("Submitted Clicked", data);
+    try {
+      const payload = {
+        hubName: data.hubName,
+        hubAddress: data.hubAddress,
+        hubContact: data.hubContact,
+        divisionId: data.hubDivision,
+        districtId: data.hubDistrict,
+        areaId: data.hubArea,
+      }
+
+      const res = await createHub(payload).unwrap();
+
+      if (res.success) {
+        toast.success("Hub created successfully!");
+        setOpen(false);
+      }
+    } catch (error: any) {
+      console.log(error);
+      const serverMessage = error?.data?.message || "Something went wrong!";
+      toast.error(serverMessage);
+    }
   };
 
   const activeIndex = STEPS.findIndex((s) => s.value === activeTab);
@@ -288,8 +312,9 @@ export default function AddHub() {
               form="create-hub"
               type="submit"
               className="flex-1 sm:flex-none"
+              disabled={ hubLoading }
             >
-              Create hub
+              { hubLoading ? "Creating..." : "Create Hub" }
             </Button>
           )}
         </DialogFooter>
