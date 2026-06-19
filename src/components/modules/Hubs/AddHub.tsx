@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import AreasComp from "@/components/general/AreaComp";
 import DistrictsComp from "@/components/general/DistrictComp";
 import DivisionsComp from "@/components/general/DivisionComp";
@@ -23,11 +22,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  useGetAreasQuery,
-  useGetDistrictsQuery,
-  useGetDivisionsQuery,
-} from "@/redux/features/location/location.api";
-import {
   BarChart3,
   FileText,
   LayoutDashboard,
@@ -39,15 +33,6 @@ import { useForm } from "react-hook-form";
 
 export default function AddHub() {
   const [open, setOpen] = useState(false);
-
-  const { data: allDivision, isLoading: allDivisionsLoading } =
-    useGetDivisionsQuery(undefined);
-  const { data: allArea, isLoading: allAreaLoading } =
-    useGetAreasQuery(undefined);
-  const { data: allDistrict, isLoading: allDistrictLoading } =
-    useGetDistrictsQuery(undefined);
-
-  console.log(allArea, allDivision, allDistrict);
 
   type HubFormData = {
     hubName: string;
@@ -81,57 +66,61 @@ export default function AddHub() {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="w-[calc(100%-2rem)] sm:max-w-150 p-0 overflow-hidden gap-0">
-        <DialogHeader className="p-6 pb-0">
-          <DialogTitle className="text-xl font-semibold tracking-tight">
+      <DialogContent className="w-[calc(100%-1rem)] sm:w-[calc(100%-2rem)] sm:max-w-150 p-0 overflow-hidden gap-0 max-h-[90vh] flex flex-col">
+        <DialogHeader className="p-4 pb-0 sm:p-6 sm:pb-0">
+          <DialogTitle className="text-lg sm:text-xl font-semibold tracking-tight">
             Add A Hub
           </DialogTitle>
         </DialogHeader>
 
         {/* Form Settings */}
         <Form {...form}>
-          <form id="create-hub" onSubmit={form.handleSubmit(onSubmit)}>
+          <form
+            id="create-hub"
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex flex-col flex-1 overflow-hidden mt-4"
+          >
             <Tabs
               defaultValue="basic-information"
-              className="w-full flex flex-col mt-4 overflow-x-auto"
+              className="w-full flex flex-col flex-1 overflow-hidden"
             >
               {/* Tabs List Here */}
-              <div className="border-b px-4 overflow-x-auto scrollbar-none">
-                <TabsList className="w-full justify-start h-12 bg-transparent p-0 gap-4 border-b-0">
+              <div className="border-b px-2 sm:px-4 overflow-x-auto scrollbar-none">
+                <TabsList className="w-full justify-start h-auto sm:h-12 bg-transparent p-0 gap-2 sm:gap-4 border-b-0">
                   <TabsTrigger
                     value="basic-information"
-                    className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-primary border-b-2 border-transparent rounded-none px-0 pb-3 pt-2 gap-2 text-muted-foreground data-[state=active]:text-foreground font-medium"
+                    className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-primary border-b-2 border-transparent rounded-none px-0 pb-3 pt-2 gap-1 sm:gap-2 text-muted-foreground data-[state=active]:text-foreground font-medium text-xs sm:text-sm whitespace-nowrap"
                   >
-                    <LayoutDashboard className="h-4 w-4" />
-                    Basic Information
+                    <LayoutDashboard className="h-4 w-4 shrink-0" />
+                    <span>Basic</span>
                   </TabsTrigger>
                   <TabsTrigger
                     value="hubDivision"
-                    className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-primary border-b-2 border-transparent rounded-none px-0 pb-3 pt-2 gap-2 text-muted-foreground data-[state=active]:text-foreground font-medium"
+                    className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-primary border-b-2 border-transparent rounded-none px-0 pb-3 pt-2 gap-1 sm:gap-2 text-muted-foreground data-[state=active]:text-foreground font-medium text-xs sm:text-sm whitespace-nowrap"
                   >
-                    <BarChart3 className="h-4 w-4" />
-                    Select Division
+                    <BarChart3 className="h-4 w-4 shrink-0" />
+                    <span>Division</span>
                   </TabsTrigger>
                   <TabsTrigger
                     value="hubDistrict"
-                    className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-primary border-b-2 border-transparent rounded-none px-0 pb-3 pt-2 gap-2 text-muted-foreground data-[state=active]:text-foreground font-medium"
+                    className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-primary border-b-2 border-transparent rounded-none px-0 pb-3 pt-2 gap-1 sm:gap-2 text-muted-foreground data-[state=active]:text-foreground font-medium text-xs sm:text-sm whitespace-nowrap"
                   >
-                    <FileText className="h-4 w-4" />
-                    Select District
+                    <FileText className="h-4 w-4 shrink-0" />
+                    <span>District</span>
                   </TabsTrigger>
                   <TabsTrigger
                     value="hubArea"
-                    className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-primary border-b-2 border-transparent rounded-none px-0 pb-3 pt-2 gap-2 text-muted-foreground data-[state=active]:text-foreground font-medium"
+                    className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-primary border-b-2 border-transparent rounded-none px-0 pb-3 pt-2 gap-1 sm:gap-2 text-muted-foreground data-[state=active]:text-foreground font-medium text-xs sm:text-sm whitespace-nowrap"
                   >
-                    <Settings className="h-4 w-4" />
-                    Select Area
+                    <Settings className="h-4 w-4 shrink-0" />
+                    <span>Area</span>
                   </TabsTrigger>
                 </TabsList>
               </div>
               {/* Tabs List Here */}
 
               {/* Content area */}
-              <div className="p-6 min-h-55 bg-muted/20 text-sm text-muted-foreground leading-relaxed">
+              <div className="p-4 sm:p-6 min-h-55 bg-muted/20 text-sm text-muted-foreground leading-relaxed overflow-y-auto flex-1">
                 {/* Basic Information Tab */}
                 <TabsContent
                   value="basic-information"
@@ -182,7 +171,7 @@ export default function AddHub() {
                 {/* Division Tab */}
                 <TabsContent
                   value="hubDivision"
-                  className="mt-0focus-visible:outline-none"
+                  className="mt-0 focus-visible:outline-none"
                 >
                   <DivisionsComp />
                 </TabsContent>
@@ -212,11 +201,17 @@ export default function AddHub() {
         </Form>
         {/* Form Settings */}
 
-        <DialogFooter className="mb-4 mr-5.5">
+        <DialogFooter className="p-4 sm:mb-4 sm:mr-5.5 sm:p-0 gap-2 flex-row sm:flex-row">
           <DialogClose asChild>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline" className="flex-1 sm:flex-none">
+              Cancel
+            </Button>
           </DialogClose>
-          <Button form="create-hub" type="submit">
+          <Button
+            form="create-hub"
+            type="submit"
+            className="flex-1 sm:flex-none"
+          >
             Submit
           </Button>
         </DialogFooter>

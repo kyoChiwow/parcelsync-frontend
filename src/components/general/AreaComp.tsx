@@ -36,7 +36,6 @@ export default function AreasComp() {
         <TableHeader>
           <TableRow>
             <TableHead>Area Name</TableHead>
-            <TableHead>District Id</TableHead>
           </TableRow>
         </TableHeader>
 
@@ -44,7 +43,6 @@ export default function AreasComp() {
           {data?.data?.map((area: any) => (
             <TableRow key={area._id}>
               <TableCell>{area.name}</TableCell>
-              <TableCell>{area.districtId}</TableCell>
             </TableRow>
           ))}
         </TableBody>

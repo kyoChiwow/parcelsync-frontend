@@ -36,7 +36,6 @@ export default function DistrictsComp() {
         <TableHeader>
           <TableRow>
             <TableHead>District Name</TableHead>
-            <TableHead>Division Id</TableHead>
           </TableRow>
         </TableHeader>
 
@@ -44,7 +43,6 @@ export default function DistrictsComp() {
           {data?.data?.map((district: any) => (
             <TableRow key={district._id}>
               <TableCell>{district.name}</TableCell>
-              <TableCell>{district.divisionId}</TableCell>
             </TableRow>
           ))}
         </TableBody>
