@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -10,9 +9,16 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useGetDivisionsQuery } from "@/redux/features/location/location.api";
+import { useState } from "react";
 import PaginationComp from "./PaginateComp";
+import type { UseFormSetValue } from "react-hook-form";
 
-export default function DivisionsComp() {
+export interface Props {
+  selectedDivision: string;
+  setValue: UseFormSetValue<any>;
+}
+
+export default function DivisionsComp({ selectedDivision, setValue }: Props) {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -41,7 +47,15 @@ export default function DivisionsComp() {
 
         <TableBody>
           {data?.data?.map((division: any) => (
-            <TableRow key={division._id}>
+            <TableRow
+              key={division._id}
+              className={`cursor-pointer ${
+                selectedDivision === division._id ? "bg-primary/10" : ""
+              }`}
+              onClick={() => {
+                setValue("hubDivision", division._id);
+              }}
+            >
               <TableCell>{division.name}</TableCell>
             </TableRow>
           ))}

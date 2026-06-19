@@ -31,12 +31,27 @@ import {
   Plus,
 } from "lucide-react";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 
 const STEPS = [
-  { value: "basic-information", label: "Basic", fullLabel: "Basic", icon: Building2 },
-  { value: "hubDivision", label: "Division", fullLabel: "Division", icon: BarChart3 },
-  { value: "hubDistrict", label: "District", fullLabel: "District", icon: FileText },
+  {
+    value: "basic-information",
+    label: "Basic",
+    fullLabel: "Basic",
+    icon: Building2,
+  },
+  {
+    value: "hubDivision",
+    label: "Division",
+    fullLabel: "Division",
+    icon: BarChart3,
+  },
+  {
+    value: "hubDistrict",
+    label: "District",
+    fullLabel: "District",
+    icon: FileText,
+  },
   { value: "hubArea", label: "Area", fullLabel: "Area", icon: MapPin },
 ] as const;
 
@@ -65,11 +80,16 @@ export default function AddHub() {
   });
 
   const onSubmit = async (data: HubFormData) => {
-    console.log(data);
+    console.log("Submitted Clicked", data);
   };
 
   const activeIndex = STEPS.findIndex((s) => s.value === activeTab);
   const progressPercent = ((activeIndex + 1) / STEPS.length) * 100;
+
+  const [selectedDivision, selectedDistrict, selectedArea] = useWatch({
+    control: form.control,
+    name: ["hubDivision", "hubDistrict", "hubArea"],
+  });
 
   return (
     <Dialog
@@ -153,7 +173,9 @@ export default function AddHub() {
                           )}
                         </span>
                         <span className="sm:hidden">{step.label}</span>
-                        <span className="hidden sm:inline">{step.fullLabel}</span>
+                        <span className="hidden sm:inline">
+                          {step.fullLabel}
+                        </span>
                       </TabsTrigger>
                     );
                   })}
@@ -173,7 +195,10 @@ export default function AddHub() {
                       <FormItem>
                         <FormLabel>Hub name</FormLabel>
                         <FormControl>
-                          <Input placeholder="e.g. Dhanmondi Sorting Hub" {...field} />
+                          <Input
+                            placeholder="e.g. Dhanmondi Sorting Hub"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -211,21 +236,30 @@ export default function AddHub() {
                   value="hubDivision"
                   className="mt-0 focus-visible:outline-none"
                 >
-                  <DivisionsComp />
+                  <DivisionsComp
+                    selectedDivision={selectedDivision}
+                    setValue={form.setValue}
+                  />
                 </TabsContent>
 
                 <TabsContent
                   value="hubDistrict"
                   className="mt-0 focus-visible:outline-none"
                 >
-                  <DistrictsComp />
+                  <DistrictsComp
+                    selectedDistrict={selectedDistrict}
+                    setValue={form.setValue}
+                  />
                 </TabsContent>
 
                 <TabsContent
                   value="hubArea"
                   className="mt-0 focus-visible:outline-none"
                 >
-                  <AreasComp />
+                  <AreasComp
+                    selectedArea={selectedArea}
+                    setValue={form.setValue}
+                  />
                 </TabsContent>
               </div>
             </Tabs>
@@ -242,12 +276,19 @@ export default function AddHub() {
             <Button
               type="button"
               className="flex-1 sm:flex-none"
-              onClick={() => setActiveTab(STEPS[activeIndex + 1].value)}
+              onClick={(e) => {
+                e.preventDefault();
+                setActiveTab(STEPS[activeIndex + 1].value);
+              }}
             >
               Next
             </Button>
           ) : (
-            <Button form="create-hub" type="submit" className="flex-1 sm:flex-none">
+            <Button
+              form="create-hub"
+              type="submit"
+              className="flex-1 sm:flex-none"
+            >
               Create hub
             </Button>
           )}

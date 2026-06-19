@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -10,9 +9,16 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useGetDistrictsQuery } from "@/redux/features/location/location.api";
+import { useState } from "react";
+import type { UseFormSetValue } from "react-hook-form";
 import PaginationComp from "./PaginateComp";
 
-export default function DistrictsComp() {
+export interface Props {
+  selectedDistrict: string;
+  setValue: UseFormSetValue<any>;
+}
+
+export default function DistrictsComp({ selectedDistrict, setValue }: Props) {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -41,7 +47,15 @@ export default function DistrictsComp() {
 
         <TableBody>
           {data?.data?.map((district: any) => (
-            <TableRow key={district._id}>
+            <TableRow
+              key={district._id}
+              className={`cursor-pointer ${
+                selectedDistrict === district._id ? "bg-primary/10" : ""
+              }`}
+              onClick={() => {
+                setValue("hubDistrict", district._id);
+              }}
+            >
               <TableCell>{district.name}</TableCell>
             </TableRow>
           ))}
