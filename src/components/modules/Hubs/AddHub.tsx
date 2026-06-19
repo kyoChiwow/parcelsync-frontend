@@ -21,18 +21,28 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { cn } from "@/lib/utils";
 import {
   BarChart3,
+  Building2,
+  Check,
   FileText,
-  LayoutDashboard,
+  MapPin,
   Plus,
-  Settings,
 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
+const STEPS = [
+  { value: "basic-information", label: "Basic", fullLabel: "Basic", icon: Building2 },
+  { value: "hubDivision", label: "Division", fullLabel: "Division", icon: BarChart3 },
+  { value: "hubDistrict", label: "District", fullLabel: "District", icon: FileText },
+  { value: "hubArea", label: "Area", fullLabel: "Area", icon: MapPin },
+] as const;
+
 export default function AddHub() {
   const [open, setOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<string>(STEPS[0].value);
 
   type HubFormData = {
     hubName: string;
@@ -58,8 +68,17 @@ export default function AddHub() {
     console.log(data);
   };
 
+  const activeIndex = STEPS.findIndex((s) => s.value === activeTab);
+  const progressPercent = ((activeIndex + 1) / STEPS.length) * 100;
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog
+      open={open}
+      onOpenChange={(next) => {
+        setOpen(next);
+        if (!next) setActiveTab(STEPS[0].value);
+      }}
+    >
       <DialogTrigger asChild>
         <Button className="gap-2 shadow-sm">
           <Plus className="h-4 w-4" /> Add Hub
@@ -67,61 +86,82 @@ export default function AddHub() {
       </DialogTrigger>
 
       <DialogContent className="w-[calc(100%-1rem)] sm:w-[calc(100%-2rem)] sm:max-w-150 p-0 overflow-hidden gap-0 max-h-[90vh] flex flex-col">
-        <DialogHeader className="p-4 pb-0 sm:p-6 sm:pb-0">
-          <DialogTitle className="text-lg sm:text-xl font-semibold tracking-tight">
-            Add A Hub
-          </DialogTitle>
+        <DialogHeader className="p-4 pb-3 sm:p-6 sm:pb-4 space-y-3">
+          <div className="space-y-1">
+            <DialogTitle className="text-lg sm:text-xl font-semibold tracking-tight">
+              Add a hub
+            </DialogTitle>
+            <p className="text-sm text-muted-foreground">
+              Step {activeIndex + 1} of {STEPS.length} &middot;{" "}
+              {STEPS[activeIndex].fullLabel}
+            </p>
+          </div>
+
+          {/* Progress bar — signature element, encodes the real step sequence */}
+          <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
+            <div
+              className="h-full rounded-full bg-primary transition-all duration-300 ease-out"
+              style={{ width: `${progressPercent}%` }}
+            />
+          </div>
         </DialogHeader>
 
-        {/* Form Settings */}
         <Form {...form}>
           <form
             id="create-hub"
             onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col flex-1 overflow-hidden mt-4"
+            className="flex flex-col flex-1 overflow-hidden"
           >
             <Tabs
-              defaultValue="basic-information"
+              value={activeTab}
+              onValueChange={setActiveTab}
               className="w-full flex flex-col flex-1 overflow-hidden"
             >
-              {/* Tabs List Here */}
-              <div className="border-b px-2 sm:px-4 overflow-x-auto scrollbar-none">
-                <TabsList className="w-full justify-start h-auto sm:h-12 bg-transparent p-0 gap-2 sm:gap-4 border-b-0">
-                  <TabsTrigger
-                    value="basic-information"
-                    className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-primary border-b-2 border-transparent rounded-none px-0 pb-3 pt-2 gap-1 sm:gap-2 text-muted-foreground data-[state=active]:text-foreground font-medium text-xs sm:text-sm whitespace-nowrap"
-                  >
-                    <LayoutDashboard className="h-4 w-4 shrink-0" />
-                    <span>Basic</span>
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="hubDivision"
-                    className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-primary border-b-2 border-transparent rounded-none px-0 pb-3 pt-2 gap-1 sm:gap-2 text-muted-foreground data-[state=active]:text-foreground font-medium text-xs sm:text-sm whitespace-nowrap"
-                  >
-                    <BarChart3 className="h-4 w-4 shrink-0" />
-                    <span>Division</span>
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="hubDistrict"
-                    className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-primary border-b-2 border-transparent rounded-none px-0 pb-3 pt-2 gap-1 sm:gap-2 text-muted-foreground data-[state=active]:text-foreground font-medium text-xs sm:text-sm whitespace-nowrap"
-                  >
-                    <FileText className="h-4 w-4 shrink-0" />
-                    <span>District</span>
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="hubArea"
-                    className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-primary border-b-2 border-transparent rounded-none px-0 pb-3 pt-2 gap-1 sm:gap-2 text-muted-foreground data-[state=active]:text-foreground font-medium text-xs sm:text-sm whitespace-nowrap"
-                  >
-                    <Settings className="h-4 w-4 shrink-0" />
-                    <span>Area</span>
-                  </TabsTrigger>
+              {/* Step tabs */}
+              <div className="border-b px-1.5 sm:px-4 overflow-x-auto scrollbar-none">
+                <TabsList className="w-full justify-start h-auto bg-transparent p-0 gap-0.5 sm:gap-2 border-b-0">
+                  {STEPS.map((step, index) => {
+                    const Icon = step.icon;
+                    const isComplete = index < activeIndex;
+                    const isActive = step.value === activeTab;
+                    return (
+                      <TabsTrigger
+                        key={step.value}
+                        value={step.value}
+                        className={cn(
+                          "group relative flex items-center gap-1 sm:gap-1.5 rounded-none border-b-2 border-transparent",
+                          "px-1.5 sm:px-3 py-2 sm:py-2.5 text-[11px] sm:text-sm font-medium whitespace-nowrap",
+                          "text-muted-foreground transition-colors",
+                          "data-[state=active]:bg-transparent data-[state=active]:shadow-none",
+                          "data-[state=active]:border-primary data-[state=active]:text-foreground",
+                        )}
+                      >
+                        <span
+                          className={cn(
+                            "flex h-4 w-4 sm:h-5 sm:w-5 shrink-0 items-center justify-center rounded-full text-[9px] sm:text-[10px] transition-colors",
+                            isActive
+                              ? "bg-primary text-primary-foreground"
+                              : isComplete
+                                ? "bg-primary/15 text-primary"
+                                : "bg-muted text-muted-foreground",
+                          )}
+                        >
+                          {isComplete ? (
+                            <Check className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
+                          ) : (
+                            <Icon className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
+                          )}
+                        </span>
+                        <span className="sm:hidden">{step.label}</span>
+                        <span className="hidden sm:inline">{step.fullLabel}</span>
+                      </TabsTrigger>
+                    );
+                  })}
                 </TabsList>
               </div>
-              {/* Tabs List Here */}
 
               {/* Content area */}
-              <div className="p-4 sm:p-6 min-h-55 bg-muted/20 text-sm text-muted-foreground leading-relaxed overflow-y-auto flex-1">
-                {/* Basic Information Tab */}
+              <div className="p-4 sm:p-6 min-h-55 bg-muted/30 leading-relaxed overflow-y-auto flex-1">
                 <TabsContent
                   value="basic-information"
                   className="mt-0 focus-visible:outline-none space-y-4"
@@ -131,9 +171,9 @@ export default function AddHub() {
                     name="hubName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Hub Name</FormLabel>
+                        <FormLabel>Hub name</FormLabel>
                         <FormControl>
-                          <Input placeholder="Hub name here" {...field} />
+                          <Input placeholder="e.g. Dhanmondi Sorting Hub" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -144,9 +184,9 @@ export default function AddHub() {
                     name="hubAddress"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Hub Address</FormLabel>
+                        <FormLabel>Hub address</FormLabel>
                         <FormControl>
-                          <Input placeholder="Hub address here" {...field} />
+                          <Input placeholder="House, road, area" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -157,63 +197,60 @@ export default function AddHub() {
                     name="hubContact"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Hub Contact</FormLabel>
+                        <FormLabel>Hub contact</FormLabel>
                         <FormControl>
-                          <Input placeholder="Hub contact here" {...field} />
+                          <Input placeholder="Phone number" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
                 </TabsContent>
-                {/* Basic Information Tab */}
 
-                {/* Division Tab */}
                 <TabsContent
                   value="hubDivision"
                   className="mt-0 focus-visible:outline-none"
                 >
                   <DivisionsComp />
                 </TabsContent>
-                {/* Division Tab */}
 
-                {/* District Tab */}
                 <TabsContent
                   value="hubDistrict"
                   className="mt-0 focus-visible:outline-none"
                 >
                   <DistrictsComp />
                 </TabsContent>
-                {/* District Tab */}
 
-                {/* Area Tab */}
                 <TabsContent
                   value="hubArea"
                   className="mt-0 focus-visible:outline-none"
                 >
                   <AreasComp />
                 </TabsContent>
-                {/* Area Tab */}
               </div>
-              {/* Content area */}
             </Tabs>
           </form>
         </Form>
-        {/* Form Settings */}
 
-        <DialogFooter className="p-4 sm:mb-4 sm:mr-5.5 sm:p-0 gap-2 flex-row sm:flex-row">
+        <DialogFooter className="border-t p-4 gap-2 flex-row">
           <DialogClose asChild>
             <Button variant="outline" className="flex-1 sm:flex-none">
               Cancel
             </Button>
           </DialogClose>
-          <Button
-            form="create-hub"
-            type="submit"
-            className="flex-1 sm:flex-none"
-          >
-            Submit
-          </Button>
+          {activeIndex < STEPS.length - 1 ? (
+            <Button
+              type="button"
+              className="flex-1 sm:flex-none"
+              onClick={() => setActiveTab(STEPS[activeIndex + 1].value)}
+            >
+              Next
+            </Button>
+          ) : (
+            <Button form="create-hub" type="submit" className="flex-1 sm:flex-none">
+              Create hub
+            </Button>
+          )}
         </DialogFooter>
       </DialogContent>
     </Dialog>
