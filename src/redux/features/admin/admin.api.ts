@@ -62,6 +62,13 @@ export const userApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["HUB"],
     }),
+    deleteHub: builder.mutation({
+      query: (hubId) => ({
+        url: `/hub/${hubId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["HUB"],
+    }),
     createHubAdmin: builder.mutation({
       query: (payload) => ({
         url: "/admin/hub-admin/create",
@@ -92,4 +99,5 @@ export const {
   useDeleteHubAdminMutation,
   useGetAllUserQuery,
   useCreateHubMutation,
+  useDeleteHubMutation,
 } = userApi;

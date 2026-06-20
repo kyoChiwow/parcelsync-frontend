@@ -92,7 +92,7 @@ export default function AddHub() {
         divisionId: data.hubDivision,
         districtId: data.hubDistrict,
         areaId: data.hubArea,
-      }
+      };
 
       const res = await createHub(payload).unwrap();
 
@@ -312,9 +312,9 @@ export default function AddHub() {
               form="create-hub"
               type="submit"
               className="flex-1 sm:flex-none"
-              disabled={ hubLoading }
+              disabled={hubLoading}
             >
-              { hubLoading ? "Creating..." : "Create Hub" }
+              {hubLoading ? "Creating..." : "Create Hub"}
             </Button>
           )}
         </DialogFooter>
