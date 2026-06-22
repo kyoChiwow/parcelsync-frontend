@@ -11,9 +11,10 @@ export const userApi = baseApi.injectEndpoints({
       providesTags: ["COMPANY"],
     }),
     getAllUser: builder.query({
-      query: () => ({
+      query: (params) => ({
         url: "/user/get-all",
         method: "GET",
+        params
       }),
       providesTags: ["USER"],
     }),
@@ -41,18 +42,20 @@ export const userApi = baseApi.injectEndpoints({
       providesTags: ["PARCEL"],
     }),
     getAllHubs: builder.query({
-      query: () => ({
+      query: (params) => ({
         url: "/hub/get-all",
         method: "GET",
+        params
       }),
       providesTags: ["HUB"],
     }),
     getHubAdmins: builder.query({
-      query: () => ({
-        url: "/user/hub-admins",
+      query: (params) => ({
+        url: "/admin/hub-admin/get-all",
         method: "GET",
+        params
       }),
-      providesTags: ["USER"],
+      providesTags: ["HUB_ADMIN"],
     }),
     createHub: builder.mutation({
       query: (payload) => ({
